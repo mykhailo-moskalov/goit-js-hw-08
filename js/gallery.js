@@ -64,13 +64,45 @@ const images = [
   },
 ];
 
-// <li class="gallery-item">
-//   <a class="gallery-link" href="large-image.jpg">
-//     <img
-//       class="gallery-image"
-//       src="small-image.jpg"
-//       data-source="large-image.jpg"
-//       alt="Image description"
-//     />
-//   </a>
-// </li>;
+const gallery = document.querySelector("ul.gallery");
+
+const markup = images
+  .map(
+    (image) =>
+      `<li class="gallery-item">
+    <a class="gallery-link" href="${image.original}">
+      <img
+        class="gallery-image"
+        src="${image.preview}"
+        data-source="${image.original}"
+        alt="${image.description}"
+      />
+    </a>
+  </li>`
+  )
+  .join("");
+
+gallery.innerHTML = markup;
+
+gallery.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (e.target.nodeName !== "IMG") {
+    return;
+  }
+  console.log(e.target.dataset.source);
+
+  const instance = basicLightbox.create(
+    `
+  <img
+  src="${e.target.dataset.source}"
+  class="gallery-image"
+  alt="${e.target.alt.value}"
+  />
+  `
+  );
+
+  instance.show();
+});
+
+// const galleryItem = document.querySelectorAll(".gallery-item");
+// galleryItem.addEventListener("click", modalImg.show());
